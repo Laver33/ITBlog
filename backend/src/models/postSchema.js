@@ -18,3 +18,5 @@ const postSchema = new mongoose.Schema({
         default: Date.now
     }
 })
+
+export default mongoose.model('Post', postSchema);

@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
 
 // Схемы
 import User from "./models/userSchema.js";
@@ -11,8 +12,9 @@ import { registerValidator } from "./validations/authValidate.js";
 import { validationResult } from "express-validator";
 
 
-
+// База
 dotenv.config();
+const tokenSecret = process.env.JWT_SECRET_TOKEN;
 const app = express();
 const PORT = process.env.PORT;
 
@@ -72,13 +74,32 @@ app.post('/auth/register', registerValidator, async (req, res) => {
     }
 })
 
-app.post('/auth/login', (req, res) => {
+app.post('/auth/login', async (req, res) => {
     try{
+        const { email, password } = req.body;        
+        const user = await User.findOne({ email });
 
+        // Проверки
+        if (!user) {
+            return res.status(400).json({
+                message: 'Пользователь не найден'
+            })
+        }
+
+        if (!await bcrypt.compare(password, user.password)) {
+            return res.status(400).json({
+                message: 'Неверный пароль'
+            })
+        }
+
+
+        const token = jwt.sign({userid: user.id} , tokenSecret, { expiresIn: '1h' })
+        res.json({token}) // токен для теста
 
     } catch (err) {
         res.status(400).json({
-            message: 'Проблема со входом'
+            message: 'Проблема со входом',
+            error: err.message
         })
     }
 })

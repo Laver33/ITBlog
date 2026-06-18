@@ -45,3 +45,23 @@ export const createPost = async (req, res) => {
         })
     }
 };
+
+export const getAllPosts = async (req, res) => {
+
+    try {
+        const posts = await Post.find();
+        if (posts.length === 0) {
+            return res.status(404).json({
+                message: "Постов не найдено."
+            })
+        }
+
+        res.json(posts);
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Произошла ошибка при получении всех постов.",
+            error: err.message
+        })
+    }
+};

@@ -46,7 +46,7 @@ app.post('/auth/login',  loginValidator, authController.login )
 
 // CRUD Посты
 app.post('/posts', AuthCheck,  AdminCheck, postCreateValidator, postController.createPost )
-// app.get('/posts', getAllPosts )
+app.get('/posts', AuthCheck, postController.getAllPosts )
 // app.post('/post/:id', getPostById )
 // app.put('/posts/:id', updatePost )
 // app.delete('/posts/:id', deletePost )

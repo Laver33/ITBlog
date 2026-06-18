@@ -74,7 +74,7 @@ export const login = async (req, res) => {
                 role: user.role
             },
             tokenSecret, 
-            { expiresIn: '1h' }
+            { expiresIn: '30d' },
         )
 
         res.json({token}) // токен для теста

@@ -65,3 +65,49 @@ export const getAllPosts = async (req, res) => {
         })
     }
 };
+
+export const searchPost = async (req, res) => {
+    try{
+        const { title } = req.query;
+        if (!title) {
+            return res.status(400).json({
+                message: "Необходимо указать заголовок поста."
+            })
+        }
+
+        const posts = await Post.find({ $regex: title, $options: 'i' }) // для регистров
+            .populate('author');
+
+        if (posts.length === 0) {
+            return res.status(404).json({
+                message: "Пост не найден."
+            })
+        }
+
+        res.status(200).json(Post);
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Произошла ошибка при получении поста.",
+            error: err.message
+        })
+    }
+}
+
+export const getPostById = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id)
+            .populate('author');
+
+        if (post.length === 0) {
+            return res.status(404).json({ message: 'Пост не найден' });
+        }
+
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Произошла ошибка при получении поста.",
+            error: err.message
+        })
+    }
+}

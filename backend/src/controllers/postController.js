@@ -49,7 +49,8 @@ export const createPost = async (req, res) => {
 export const getAllPosts = async (req, res) => {
 
     try {
-        const posts = await Post.find();
+        const posts = await Post.find().populate('author', 'name email');
+        
         if (posts.length === 0) {
             return res.status(404).json({
                 message: "Постов не найдено."
@@ -66,17 +67,24 @@ export const getAllPosts = async (req, res) => {
     }
 };
 
+// Пост по названию
 export const searchPost = async (req, res) => {
-    try{
-        const { title } = req.query;
+
+    try {
+        const { title } = req.body;
+
         if (!title) {
             return res.status(400).json({
                 message: "Необходимо указать заголовок поста."
             })
         }
 
-        const posts = await Post.find({ $regex: title, $options: 'i' }) // для регистров
-            .populate('author');
+        const posts = await Post.find({
+            title: { 
+                $regex: title, 
+                $options: 'i' 
+            }
+        }).populate('author'); // приравниваем регистры
 
         if (posts.length === 0) {
             return res.status(404).json({
@@ -84,7 +92,7 @@ export const searchPost = async (req, res) => {
             })
         }
 
-        res.status(200).json(Post);
+        res.status(200).json(posts);
 
     } catch (err) {
         res.status(500).json({
@@ -94,20 +102,74 @@ export const searchPost = async (req, res) => {
     }
 }
 
-export const getPostById = async (req, res) => {
-    try {
-        const post = await Post.findById(req.params.id)
-            .populate('author');
 
-        if (post.length === 0) {
+// Пост по айди 
+export const getPostById = async (req, res) => {
+    const { id } = req.params; 
+
+    try {
+        const post = await Post.findById(id).populate('author');
+
+        if (!post) { 
             return res.status(404).json({ message: 'Пост не найден' });
         }
 
+        res.status(200).json(post);
 
     } catch (err) {
         res.status(500).json({
             message: "Произошла ошибка при получении поста.",
             error: err.message
+        });
+    }
+}
+
+// Обновление по айди
+export const updatePost = async ( req, res ) => {
+     try { 
+        const post = await Post.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ message: 'Пост не найден' });
+        }
+
+        const { title, content } = req.body;
+
+        const updatedPost = await Post.findByIdAndUpdate(
+            req.params.id,
+            { title, content },
+            { new: true } // возвращает обновленный документ
+        );
+
+        res.status(200).json({ message: 'Пост успешно обновлен', result: updatedPost });
+
+
+     } catch (err) {
+        res.status(500).json({
+            message: 'Произошла ошибка при обновлении поста.',
+            error: err
+        })
+     }
+}
+
+// Удаление по айди
+export const deletePostById = async ( req, res ) => {
+    try {
+        const { id } = req.params;
+        const post = Post.findById(id);
+        if (!post) {
+            return res.status(404).json({ message: 'Пост не найден' });
+        }
+        await post.deleteOne();
+
+        res.status(200).json({
+            message: 'Пост успешно удален'
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            message: 'Произошла ошибка при удалении поста.',
+            error: err
         })
     }
 }
+

@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 
-
 // Валидация
 import { registerValidator, loginValidator } from "./validations/authValidate.js";
 import { postCreateValidator } from "./validations/postValidate.js";
@@ -16,23 +15,24 @@ import * as postController from "./controllers/postController.js";
 import { AuthCheck } from "./middleware/authMiddleware.js";
 import { AdminCheck } from "./middleware/adminMiddleware.js";
 
+// Коннект
+import { connectDB } from './config/database.js';
+
 // База
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
-mongoose.connect(process.env.MONGODB_CONNECT_PORT
-).then(() =>{
-    console.log('База подключена')}
-).catch((err) => {
-    console.log('Проблема с подключением к бд: ', err )})
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server стартовал на: http://localhost:${PORT}`);
+    });
+}).catch((err) => {
+    console.error('Не удалось запустить сервер:', err);
+    process.exit(1);
+});
 
 app.use(express.json())
-
-
-app.listen(PORT, () => {
-    console.log('Server стартовал на: ' + `http://localhost:${PORT}`)
-});
 
 
 // Тут будут роуты
@@ -44,13 +44,13 @@ app.get('/', (req, res) => {
 app.post('/auth/register', registerValidator, authController.register )
 app.post('/auth/login',  loginValidator, authController.login )
 
-// CRUD Посты
-app.post('/posts', AuthCheck,  AdminCheck, postCreateValidator, postController.createPost )
+// CRUD Посты ( все готовы )
+app.post('/posts',AdminCheck, postCreateValidator, postController.createPost )
 app.get('/posts', AuthCheck, postController.getAllPosts )
-app.get('/post/search', postController.searchPost )
-app.get('/posts/:id', postController.getPostById)  
-// app.put('/posts/:id', updatePost )
-// app.delete('/posts/:id', deletePost )
+app.get('/post/search', AuthCheck, postController.searchPost )
+app.get('/posts/:id', AuthCheck, postController.getPostById)  
+app.put('/posts/:id', AdminCheck, postController.updatePost )
+app.delete('/posts/:id', AdminCheck, postController.deletePostById )
 
 
 

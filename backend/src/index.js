@@ -33,6 +33,7 @@ connectDB().then(() => {
 });
 
 app.use(express.json())
+app.use(cors())  // Для запросов с фронта
 
 
 // Тут будут роуты

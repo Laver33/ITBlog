@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 
 // Валидация
@@ -10,6 +11,7 @@ import { postCreateValidator } from "./validations/postValidate.js";
 // Контроллеры
 import * as authController from "./controllers/authController.js";
 import * as postController from "./controllers/postController.js";
+import * as userController from "./controllers/userController.js";
 
 // MiddleWare
 import { AuthCheck } from "./middleware/authMiddleware.js";
@@ -45,13 +47,16 @@ app.get('/', (req, res) => {
 app.post('/auth/register', registerValidator, authController.register )
 app.post('/auth/login',  loginValidator, authController.login )
 
+//CRUD Юзеры 
+app.get('/users', userController.getAllUsers )
+
 // CRUD Посты ( все готовы )
 app.post('/posts',AdminCheck, postCreateValidator, postController.createPost )
-app.get('/posts', AuthCheck, postController.getAllPosts )
-app.get('/post/search', AuthCheck, postController.searchPost )
-app.get('/posts/:id', AuthCheck, postController.getPostById)  
-app.put('/posts/:id', AdminCheck, postController.updatePost )
-app.delete('/posts/:id', AdminCheck, postController.deletePostById )
+app.get('/posts', postController.getAllPosts )
+app.get('/post/search',  postController.searchPost )
+app.get('/posts/:id', postController.getPostById)  
+app.put('/posts/:id', postController.updatePost )
+app.delete('/posts/:id', postController.deletePostById )
 
-
+// добавить после тестов проверки AdminCheck и AuthCheck
 

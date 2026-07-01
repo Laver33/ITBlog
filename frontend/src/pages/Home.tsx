@@ -83,6 +83,7 @@ const Home = () => {
           </p>
         </div>
 
+
         {/* Посты */}
         {posts.map((post) => (
           <div 
@@ -100,7 +101,8 @@ const Home = () => {
 
             <button
               onClick={undefined}
-              className='cursor-pointer mt-6 px-5 py-2.5 text-sm font-medium text-white bg-gray-800 rounded-sm border border-gray-600 hover:bg-blue-600 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300'
+              className='cursor-pointer mt-6 px-5 py-2.5 text-sm font-medium text-white bg-gray-800 rounded-sm border border-gray-600 
+              hover:bg-blue-600 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300'
             >
               Читать дальше
             </button>

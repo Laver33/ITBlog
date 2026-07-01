@@ -16,7 +16,7 @@ export const getAllUsers = async (req, res) => {
 
     } catch (err) {
         res.status(500).json({
-            message: "Произошла ошибка при получении всех постов.",
+            message: "Произошла ошибка при получении всех пользователей.",
             error: err.message
         })
     }

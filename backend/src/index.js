@@ -47,8 +47,11 @@ app.get('/', (req, res) => {
 app.post('/auth/register', registerValidator, authController.register )
 app.post('/auth/login',  loginValidator, authController.login )
 
-//CRUD Юзеры 
+//CRUD Юзеры ( доделать )
 app.get('/users', userController.getAllUsers )
+// app.get('/users/:id', userController.getUserById )
+// app.put('/users/:id', userController.updateUser )
+// app.delete('/users/:id', userController.deleteUserById )    
 
 // CRUD Посты ( все готовы )
 app.post('/posts',AdminCheck, postCreateValidator, postController.createPost )

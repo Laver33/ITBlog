@@ -177,9 +177,9 @@ const RegisterPage = () => {
                             <Link
                                 className="w-full border border-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-center
                                 text-white font-semibold py-3 rounded-lg transition-all duration-200 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50"
-                                to={'/register'}
+                                to={'/login'}
                             >
-                                Регистрация
+                                Войти
                             </Link>
 
                         </div>

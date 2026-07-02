@@ -86,3 +86,18 @@ export const login = async (req, res) => {
         })
     }
 }
+
+export const getMe = async (req, res) => {
+    try {
+
+        const user = await User.findById(req.user.userid).select('-password');
+        
+        if (!user) {
+            return res.status(404).json({ message: 'Пользователь не найден' });
+        }
+        
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ message: 'Ошибка получения данных' });
+    }
+};

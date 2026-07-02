@@ -49,22 +49,30 @@ const Home = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
+
       try {
+
         const response = await api.get('/users');
         setUsers(response.data);
+
       } catch (err: any) {
         setError(err?.message || String(err) || 'Ошибка с юзерами');
+
       } finally {
         setLoading(false);
+
       }
     };
 
     const fetchPosts = async () => {
       try {
+
         const response = await api.get('/posts');
         setPosts(response.data);
+
       } catch (err: any) {
         setError(err?.message || String(err) || 'Ошибка с постами');
+        
       } finally {
         setLoading(false);
       }

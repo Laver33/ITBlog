@@ -46,6 +46,7 @@ app.get('/', (req, res) => {
 // Регистрация и вход
 app.post('/auth/register', registerValidator, authController.register )
 app.post('/auth/login',  loginValidator, authController.login )
+app.get('/auth/me', AuthCheck, authController.getMe);
 
 //CRUD Юзеры ( доделать )
 app.get('/users', userController.getAllUsers )

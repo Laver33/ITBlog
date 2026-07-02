@@ -7,9 +7,9 @@ import Home from './pages/Home.tsx';
 import About from './pages/About.tsx';
 import CreatePost from './pages/CreatePost.tsx';
 import Contacts from './pages/Contacts.tsx';
-import Stats from './pages/Stats.tsx';
 import Login from './pages/auth/Login.tsx';
 import Register from './pages/auth/Register.tsx';
+import AdminPanel from './pages/AdminPanel.tsx';
 
 function AppContent() {
   const location = useLocation();
@@ -26,9 +26,9 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/adminpanel" element={<AdminPanel />} />
           <Route path="/create" element={<CreatePost />} />
           <Route path="/contacts" element={<Contacts />} />
-          <Route path="/stats" element={<Stats />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>

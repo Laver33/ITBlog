@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import api from '../../services/api';
 
 const RegisterPage = () => {
 
@@ -45,6 +46,16 @@ const RegisterPage = () => {
         
         setErrors({});
         console.log('Register:', { name, lastName, email, password });
+
+        api.post('/auth/register', { name, lastName, email, password })
+           .then(res => { console.log(
+               res.data
+           )}).catch(errors => {
+            console.error('Ошибка при отправке:', errors);
+        })
+            
+
+
         setSuccess('Регистрация прошла успешно!');
         setName('');
         setLastName('');
@@ -54,7 +65,7 @@ const RegisterPage = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
+        <div className="flex justify-center items-center min-h-auto">
 
             <div className="bg-gray-900 p-7 rounded-xl shadow-2xl border border-gray-700 w-full max-w-md transition-all hover:shadow-gray-700/50">
 
@@ -167,11 +178,10 @@ const RegisterPage = () => {
 
                             <button
                                 type="submit"
-                                onClick={handleSubmit} // 👈 Добавляем обработчик на кнопку
                                 className="w-full bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
                                 text-white font-semibold py-3 rounded-lg transition-all duration-200 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50"
                             >
-                                Войти
+                                Зарегистрироваться
                             </button>
 
                             <Link

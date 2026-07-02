@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const LoginPage = () => {
+    const { login } = useAuth();
+    const navigate = useNavigate()
 
     // для данных
     const [email, setEmail] = useState('');
@@ -9,8 +12,10 @@ const LoginPage = () => {
     const [errors, setErrors] = useState<{email?: string, password?: string}>({});
     const [success, setSuccess] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
+
         e.preventDefault();
+
         setSuccess('');
         
         const newErrors: {email?: string, password?: string} = {};
@@ -19,8 +24,8 @@ const LoginPage = () => {
             newErrors.email = 'Введите корректную почту.';
         }
         
-        if (!password || password.length < 5) {
-            newErrors.password = 'Пароль должен быть длинее 5 символов.';
+        if (!password || password.length < 7) {
+            newErrors.password = 'Пароль должен быть длинее 7 символов.';
         }
         
         if (Object.keys(newErrors).length > 0) {
@@ -29,14 +34,22 @@ const LoginPage = () => {
         }
         
         setErrors({});
-        console.log('Login:', { email, password });
-        setSuccess('Вход выполнен');
+
+        try {
+
+            await login(email, password);
+
+            navigate('/');
+        } catch (err) {
+            console.error('Ошибка входа:', err);
+        }
+
         setEmail('');
         setPassword('');
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
+        <div className="flex justify-center items-center min-h-auto">
 
             <div className="bg-gray-900 p-7 rounded-xl shadow-2xl border border-gray-700 w-full max-w-md transition-all hover:shadow-gray-700/50">
 
@@ -44,7 +57,7 @@ const LoginPage = () => {
                     Вход
                 </h1>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form className="space-y-5">
                     <div>
                         <input
                             type="email"
@@ -103,7 +116,7 @@ const LoginPage = () => {
 
                         <button
                             type="submit"
-                            onClick={handleSubmit} // 👈 Добавляем обработчик на кнопку
+                            onClick={handleSubmit}
                             className="w-full bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
                             text-white font-semibold py-3 rounded-lg transition-all duration-200 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50"
                         >
@@ -137,3 +150,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+

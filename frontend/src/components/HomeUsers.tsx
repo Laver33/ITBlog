@@ -21,7 +21,7 @@ const HomeUsers = (props: {users: iUser[]}) => {
           {props.users.map((user) => (
             <li 
               key={user._id} 
-              className='bg-gray-800/50 hover:bg-gray-800 p-2 rounded-sm border border-gray-700 transition-all duration-1000 hover:border-blue-500/50 hover:translate-x-1'
+              className='bg-gray-800/50 hover:bg-gray-800 p-2 mb-2 rounded-sm border border-gray-700 transition-all duration-1000 hover:border-blue-500/50 hover:translate-x-1'
             >
               <p className='text-sm text-gray-300'>
                 <span className='font-semibold text-blue-400'>

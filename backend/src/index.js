@@ -54,12 +54,12 @@ app.get('/users', userController.getAllUsers )
 // app.delete('/users/:id', userController.deleteUserById )    
 
 // CRUD Посты ( все готовы )
-app.post('/posts',AdminCheck, postCreateValidator, postController.createPost )
-app.get('/posts', postController.getAllPosts )
-app.get('/post/search',  postController.searchPost )
+app.post('/posts', AdminCheck, postCreateValidator, postController.createPost)
+app.get('/posts', postController.getAllPosts)
+app.get('/post/search', postController.searchPost)
 app.get('/posts/:id', postController.getPostById)  
-app.put('/posts/:id', postController.updatePost )
-app.delete('/posts/:id', postController.deletePostById )
+app.put('/posts/:id', postController.updatePost)
+app.delete('/posts/:id', postController.deletePostById)
 
 // добавить после тестов проверки AdminCheck и AuthCheck
 

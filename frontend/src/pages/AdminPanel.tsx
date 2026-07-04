@@ -12,6 +12,7 @@ interface iUser {
 }
 
 interface iPost {
+    _id: string,
     title: string,
     content: string,
     date: string,
@@ -50,6 +51,18 @@ const AdminPanel = () => {
         fetchUsers();
         fetchPosts();
     }, [])
+
+    const handleDelete = async (id: string) => {
+        try {
+
+            await api.delete(`/users/${id}`);
+            setUsers(prev => prev.filter(user => user._id !== id));
+
+        } catch (error) {
+            console.error('Ошибка при удалении пользователя:', error);
+            setError(true);
+        }
+    }
 
     if (error){ return <p>"Ошибка при загрузке данных"</p> }
     
@@ -119,7 +132,10 @@ const AdminPanel = () => {
                                 <p className="flex-1 truncate">{user.email}</p>
 
                                 {user.role === 'admin' ? <p className="w-32 shrink-0 truncate">{user.role}</p> : 
-                                    <button className="w-32 bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600 duration-1000 whitespace-nowrap">
+                                    <button 
+                                        className="w-32 bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600 duration-1000 whitespace-nowrap"
+                                        onClick={() => handleDelete(user._id)}
+                                    >
                                         Удалить
                                     </button>
                                 }
@@ -131,8 +147,28 @@ const AdminPanel = () => {
                 <div className="w-1/2">
                     <h1 className="text-3xl text-white mb-5">Посты</h1>
 
-                    <div className="bg-gray-800 p-5 rounded">
-                        
+                    <div className="bg-gray-800 p-5 flex flex-col gap-2 rounded overflow-y-auto 
+                        max-h-64 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
+                    >
+
+                        {/* Пользователи */}
+                        {posts.map(post => (
+                            <div 
+                                key={post._id} 
+                                className="flex items-center gap-2 text-white py-1 px-2 bg-gray-700 
+                                    hover:bg-gray-600 duration-1000 rounded"
+                            >
+                                <p className="w-6/12 shrink-0 truncate">{post.title}</p>
+
+                                <button className="w-3/12 bg-gray-500 px-3 py-1 rounded text-white hover:bg-gray-600 hover:border duration-1000 whitespace-nowrap">
+                                    Изменить
+                                </button>
+
+                                <button className="w-3/12 bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600 duration-1000 whitespace-nowrap">
+                                    Удалить
+                                </button>
+                            </div>
+                        ))}
                     </div>
                 
                 </div>

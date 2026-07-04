@@ -17,7 +17,6 @@ const NavBar = (props: { projectName: string }) => {
     { path: "/", label: "Главная" },
     { path: "/about", label: "О проекте" },
     { path: "/contacts", label: "Контакты" },
-    { path: "/stats", label: "Статистика" },
   ];
 
   return (

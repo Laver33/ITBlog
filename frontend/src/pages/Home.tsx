@@ -3,6 +3,8 @@ import * as IconName from "react-icons/cg";
 import api from '../services/api';
 import HomeUsers from '../components/HomeUsers';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import HomeAdmin from '../components/HomeAdmin';
 
 
 interface iPost {
@@ -26,6 +28,7 @@ const Home = () => {
   const [users, setUsers] = useState<iUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
   
 
   // Сортировка по дате
@@ -149,7 +152,14 @@ const Home = () => {
         ))}
       </div>
 
-      <HomeUsers users={users} />
+      <div className='w-3/12'>
+          <div className='sticky top-6 transition-all'>
+              <HomeUsers users={users} />
+              
+              {user?.role === 'admin' ? <HomeAdmin /> : null}
+          </div>
+      </div>
+
     </div>
   );
 };

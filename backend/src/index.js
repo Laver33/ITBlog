@@ -52,7 +52,7 @@ app.get('/auth/me', AuthCheck, authController.getMe);
 app.get('/users', userController.getAllUsers )
 // app.get('/users/:id', userController.getUserById )
 // app.put('/users/:id', userController.updateUser )
-// app.delete('/users/:id', userController.deleteUserById )    
+app.delete('/users/:id', userController.deleteUserById )    
 
 // CRUD Посты ( все готовы )
 app.post('/posts', AdminCheck, postCreateValidator, postController.createPost)

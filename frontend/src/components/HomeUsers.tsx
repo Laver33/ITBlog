@@ -11,7 +11,7 @@ interface iUser {
 const HomeUsers = (props: {users: iUser[]}) => { 
 
     return(
-        <div className='w-3/12 bg-gray-900 rounded-sm shadow-lg border border-gray-700 px-2 pt-4 h-100 
+        <div className=' bg-gray-900 rounded-sm shadow-lg border border-gray-700 px-2 pt-4 h-100 
           overflow-y-auto sticky top-6 transition-all hover:shadow-blue-500/5 cursor-default'
         >
         <h2 className='mb-4 text-xl font-bold text-gray-300 bg-clip-text text-center'>

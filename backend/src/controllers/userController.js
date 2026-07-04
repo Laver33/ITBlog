@@ -15,9 +15,28 @@ export const getAllUsers = async (req, res) => {
         res.json(users);
 
     } catch (err) {
+        
         res.status(500).json({
             message: "Произошла ошибка при получении всех пользователей.",
             error: err.message
         })
+
+    }
+}
+
+export const deleteUserById = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+        const user = await User.findByIdAndDelete(id);
+
+    } catch (err) {
+
+        res.status(500).json({
+            message: "Произошла ошибка при удалении пользователя.",
+            error: err.message
+        })
+
     }
 }

@@ -10,6 +10,7 @@ import Contacts from './pages/Contacts.tsx';
 import Login from './pages/auth/Login.tsx';
 import Register from './pages/auth/Register.tsx';
 import AdminPanel from './pages/AdminPanel.tsx';
+import PostPage from './pages/PostPage.tsx';
 
 function AppContent() {
   const location = useLocation();
@@ -31,6 +32,7 @@ function AppContent() {
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path='/posts/:id' element ={<PostPage />} />
         </Routes>
       </main>
     </div>

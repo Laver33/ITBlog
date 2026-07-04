@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import * as IconName from "react-icons/cg";
 import api from '../services/api';
 import HomeUsers from '../components/HomeUsers';
+import { Link } from 'react-router-dom';
 
 
 interface iPost {
@@ -127,15 +128,19 @@ const Home = () => {
               {post.title}
             </h1>
             <p className='text-gray-300 leading-relaxed'>
-              {post.content}
+              {post.content.slice(0, 200)}
             </p>
+
+            {/* Нижняя часть поста */}
             <div className="botton-content flex mt-6 justify-between">
-              <button
+              <Link
+                to={`/posts/${post._id}`}
                 className='cursor-pointer px-5 py-2.5 text-sm font-medium text-white bg-gray-800 rounded-sm border border-gray-600 
                   hover:bg-blue-600 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300'
               >
                 Читать дальше
-              </button>
+              </Link>
+
               <p className='text-gray-300'>
                 {post.date.slice(0, 10)} 
               </p>

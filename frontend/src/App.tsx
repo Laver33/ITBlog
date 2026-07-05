@@ -11,6 +11,7 @@ import Login from './pages/auth/Login.tsx';
 import Register from './pages/auth/Register.tsx';
 import AdminPanel from './pages/AdminPanel.tsx';
 import PostPage from './pages/PostPage.tsx';
+import ChangePost from './pages/ChangePost.tsx'
 
 function AppContent() {
   const location = useLocation();
@@ -29,6 +30,7 @@ function AppContent() {
           <Route path="/about" element={<About />} />
           <Route path="/adminpanel" element={<AdminPanel />} />
           <Route path="/create" element={<CreatePost />} />
+          <Route path="/posts/:id" element={<ChangePost />} />          
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

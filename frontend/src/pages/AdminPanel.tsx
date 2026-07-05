@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import CardForStat from "../components/CardForStat";
 import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 interface iUser {
     _id: string,
@@ -60,6 +61,16 @@ const AdminPanel = () => {
 
         } catch (error) {
             console.error('Ошибка при удалении пользователя:', error);
+            setError(true);
+        }
+    }
+
+    const handleDeletePost = async (id: string) => {
+        try {
+            await api.delete(`/posts/${id}`);
+            setPosts(prev => prev.filter(post => post._id !== id));
+        } catch (error) {
+            console.error('Ошибка при удалении поста:', error);
             setError(true);
         }
     }
@@ -160,11 +171,17 @@ const AdminPanel = () => {
                             >
                                 <p className="w-6/12 shrink-0 truncate">{post.title}</p>
 
-                                <button className="w-3/12 bg-gray-500 px-3 py-1 rounded text-white hover:bg-gray-600 hover:border duration-1000 whitespace-nowrap">
+                                <Link
+                                    className="w-3/12 text-center bg-gray-500 px-3 py-1 rounded text-white hover:bg-gray-600 hover:border duration-1000 whitespace-nowrap"
+                                    to={`/posts/${post._id}`}
+                                >
                                     Изменить
-                                </button>
+                                </Link>
 
-                                <button className="w-3/12 bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600 duration-1000 whitespace-nowrap">
+                                <button 
+                                    className="w-3/12 bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600 duration-1000 whitespace-nowrap"
+                                    onClick={() => handleDeletePost(post._id)}
+                                >
                                     Удалить
                                 </button>
                             </div>

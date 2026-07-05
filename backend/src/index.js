@@ -50,8 +50,7 @@ app.get('/auth/me', AuthCheck, authController.getMe);
 
 //CRUD Юзеры ( доделать )
 app.get('/users', userController.getAllUsers )
-// app.get('/users/:id', userController.getUserById )
-// app.put('/users/:id', userController.updateUser )
+// app.put('/users/:id', userController.updateUser ) потом при личном кабинете
 app.delete('/users/:id', userController.deleteUserById )    
 
 // CRUD Посты ( все готовы )

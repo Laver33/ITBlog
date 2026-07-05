@@ -1,13 +1,12 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
-import { useAuth } from "../context/AuthContext";
-
+import { toast } from 'react-toastify';
 
 interface iPost {
-    title: string,
-    content: string,
-    author: string | undefined,
+    _id?: string;
+    title: string;
+    content: string;
 }
 
 interface iErrors {
@@ -15,73 +14,81 @@ interface iErrors {
     content?: string,
 }
 
-const CreatePostPage = () => {
+const ChangePost = () => {
 
-    const { user } = useAuth();
-
-    // Для данных
-    const [postForm, setPostForm] = useState<iPost>({
+    const { id } = useParams()
+    const [post, setPost] = useState<iPost>({
         title: '',
-        content: '',
-        author: user?._id
+        content: ''
     });
-    const [errors, setErrors] = useState<iErrors>({});
+    const [errors, setError] = useState<iErrors>({});
+    const navigate = useNavigate()
 
-
-    // Измененпя
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        setPostForm({
-            ...postForm,
-            [e.target.name]: e.target.value,
-        });
-
-        setErrors(prev => ({...prev, [e.target.name]: undefined}));
-    }
-
-
-    // Отправка
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault(); 
-
-        if(!user){
-            alert('Вы не авторизованы')
-        }
-        
-        const newErrors: {title?: string, content?: string} = {};
-        
-        // Валидация
-        if (postForm.title.length < 5) {
-            newErrors.title = 'Название должно содержать минимум 5 символов';
-        }
-        
-        if (postForm.content.length < 50 || postForm.content.length > 5000) {
-            newErrors.content = 'Контент должен быть от 50 до 5000 символов';
-        }
-        
-
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+    useEffect(() => {
+        if (!id) {
+            console.error('ID не найден');
+            navigate('/')
             return; 
         }
-        
 
-        setErrors({});
-        
-        api.post('/posts', postForm)
-            .then(res => {
-                console.log(res.data);
+        const fetchPost = async () => {
+            const response = await api.get(`/posts/${id}`);
+            setPost(response.data);
+        }
 
-                setPostForm({
-                    title: '',
-                    content: '',
-                    author: user?._id,
-                });
+        fetchPost()
+    }, [])
+
+    // Обработка формы
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+
+        if(post?.title.trim() === '') {
+            setError({
+                title: 'Название поста не может быть пустым'
             })
-            .catch(err => {
-                console.log(err);
-                setErrors({content: 'Ошибка при отправке данных'});
-            });
-    };
+            return
+        }
+
+        if (post?.content.trim() === '') {
+            setError({
+                content: 'Контент поста не может быть пустым'
+            })
+            return
+        } 
+
+        try {
+
+            const response = await api.put(`/posts/${id}`, post);
+            console.log('Обновлен пост: ' + response)
+
+            if (response.status === 200) {
+                toast.success('Пост обновлен')
+                setError({})
+                navigate('/')
+            }
+
+        } catch (error) {
+            setError({
+                title: 'Ошибка обновления поста'
+            })
+
+            console.log(error)
+        }
+            
+    }
+
+    // Изменения в данных
+    const handleChange = (e: any) => {
+        const { name, value } = e.target;
+        
+        setPost((prevData) => ({
+        ...prevData,     
+        [name]: value  
+
+        }));
+    }
+
 
 
     return(
@@ -89,7 +96,7 @@ const CreatePostPage = () => {
 
             <div className="w-full max-w-125 p-4 rounded-sm border border-gray-700 bg-gray-800 ">
 
-                <h1 className="text-4xl font-bold text-center mb-6 gradient-text text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-gray-600">Создать пост</h1>
+                <h1 className="text-4xl font-bold text-center mb-6 gradient-text text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-gray-600">Редактирование поста</h1>
                 
                 {/* Форма с данными */}
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -99,7 +106,7 @@ const CreatePostPage = () => {
                         <label className="block text-sm font-medium mb-1 text-blue-400">Название поста</label>
                         <input
                             name="title"
-                            value={postForm.title}
+                            value={post.title}
                             onChange={handleChange}
                             className={`w-full px-4 py-2 max-h-12 bg-gray-700/50 border border-gray-600 rounded-lg text-gray-200 placeholder-gray-400 
                             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
@@ -115,7 +122,7 @@ const CreatePostPage = () => {
                         <label className="block text-sm font-medium mb-1 text-blue-400 ">Контент</label>
                         <textarea
                             name="content"
-                            value={postForm.content}
+                            value={post.content}
                             onChange={handleChange}
                             rows={8}
                             maxLength={5000}
@@ -133,17 +140,14 @@ const CreatePostPage = () => {
                         type="submit" 
                         className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                     >
-                        Создать пост
+                        Редактировать пост
                     </button>
 
                 </form>
             </div>
 
         </div>
-        
-
     )
 }
 
-
-export default CreatePostPage;
+export default ChangePost;

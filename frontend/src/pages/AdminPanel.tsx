@@ -1,167 +1,49 @@
-import { useState } from "react";
-import CardForStat from "../components/CardForStat";
-import { useAuth } from "../context/AuthContext";
-import { Link } from "react-router-dom";
-import usePostStore from "../store/postStore";
-import useUserStore from "../store/userStore";
+import { NavLink, Outlet } from "react-router-dom";
 
 
-
+interface iButtonsNavArrow {
+    name: string;
+    link: string;
+}
 
 const AdminPanel = () => {
 
-    // Данные
-    const [error, setError] = useState(false);
-
-
-    // Сторы
-    const { posts, deletePost } = usePostStore();
-    const { users, deleteUser } = useUserStore();
-    const { user } = useAuth();
-     
-
-    const handleDeleteUser = async (id: string) => {
-        if (!id) {
-            setError(true);
-            return
-        }
-
-        deleteUser(id); 
-    }
-
-    const handleDeletePost = async (id: string) => {
-        if (!id) {
-            setError(true);
-            return
-        }
-
-        deletePost(id); 
-    }
-
-    if (error){ return <p>"Ошибка при загрузке данных"</p> }
     
-    const currentUser = {
-        name: user?.name,
-        lastName: user?.lastName,
-        email: user?.email,
-        role: user?.role,
-    }
+
+    const btnNavArrow: iButtonsNavArrow[] = [
+        {name: 'Статистика', link: 'stats'},
+        {name: 'Профиль', link: 'profile'},              
+        {name: 'Посты', link: 'posts'},            
+        {name: 'Пользователи', link: 'users'},     
+        {name: 'Фидбек', link: 'feedback'},  
+    ]
 
     return (
         <div>
-
-            <div className="flex gap-10">
-
-                {/* Тут чисто краткая статистика */}
-                <div className="w-5/12 ">
-                    <h1 className="text-3xl text-white mb-5">Статистика сайта</h1>
-
-                    <div className="content-stat flex-col gap-3 flex justify-between">
-                        <CardForStat title={"Количество постов"} value={posts.length} />                
-                        <CardForStat title={"Количество всего пользователей"} value={users.length} />                
-                        <CardForStat title={"Количество админов"} value={users.filter(user => user.role === 'admin').length} />               
-                        <CardForStat title={"Количество обычных пользователей"} value={users.filter(user => user.role === 'user').length} />               
-                    </div>
-                </div>
-
-                {/* А тут наши данные */}
-                <div className="w-7/12 ">
-                    <h1 className="text-3xl text-white mb-5">Мои данные</h1>
-
-                    <div className="grid gap-3 bg-gray-800 p-5 rounded">
-                        <p className="px-4 py-3 rounded text-gray-400 border hover:bg-gray-600 hover:border-0 duration-300 bg-gray-700">Имя: {currentUser.name}</p>
-                        <p className="px-4 py-3 rounded text-gray-400 border hover:bg-gray-600 hover:border-0 duration-300 bg-gray-700">Фамилия: {currentUser.lastName}</p>
-                        <p className="px-4 py-3 rounded text-gray-400 border hover:bg-gray-600 hover:border-0 duration-300 bg-gray-700">Email: {currentUser.email}</p>
-                        <p className="px-4 py-3 rounded text-gray-400 border hover:bg-gray-600 hover:border-0 duration-300 bg-gray-700">Роль: {currentUser.role}</p>
-                    </div>
-
-                </div>
-            </div>
-
-            <div className="flex mt-5 gap-10">
-
-                <div className="w-1/2">
-                    <h1 className="text-3xl text-white mb-5">Пользователи</h1>
-
-                    <div className="bg-gray-800 p-5 flex flex-col gap-2 rounded overflow-y-auto 
-                        max-h-64 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
-                    >
-                        {/* Заголовок */}
-                        <div className="flex gap-2 bg-gray-900 text-gray-400 py-1 px-2 rounded">
-                            <p className="w-20 shrink-0">Имя</p>
-                            <p className="w-28 shrink-0">Фамилия</p>
-                            <p className="flex-1">Почта</p>
-                            <p className="w-32 shrink-0">Роль</p>
-                        </div>
-
-                        {/* Пользователи */}
-                        {users.map(user => (
-                            <div 
-                                key={user._id} 
-                                className="flex items-center gap-2 text-white py-1 px-2 bg-gray-700 
-                                    hover:bg-gray-600 duration-1000 rounded"
-                            >
-                                <p className="w-20 shrink-0 truncate">{user.name}</p>
-                                <p className="w-28 shrink-0 truncate">{user.lastName}</p>
-                                <p className="flex-1 truncate">{user.email}</p>
-
-                                {user.role === 'admin' ? <p className="w-32 shrink-0 truncate">{user.role}</p> : 
-                                    <button 
-                                        className="w-32 bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600 duration-1000 whitespace-nowrap"
-                                        onClick={() => handleDeleteUser(user._id)}
-                                    >
-                                        Удалить
-                                    </button>
-                                }
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="w-1/2">
-                    <h1 className="text-3xl text-white mb-5">Посты</h1>
-
-                    <div className="bg-gray-800 p-5 flex flex-col gap-2 rounded overflow-y-auto 
-                        max-h-64 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
-                    >
-
-                        {/* Пользователи */}
-                        {posts.map(post => (
-                            <div 
-                                key={post._id} 
-                                className="flex items-center gap-2 text-white py-1 px-2 bg-gray-700 
-                                    hover:bg-gray-600 duration-1000 rounded"
-                            >
-                                <p className="w-6/12 shrink-0 truncate">{post.title}</p>
-
-                                <Link
-                                    className="w-3/12 text-center bg-gray-500 px-3 py-1 rounded text-white hover:bg-gray-600 hover:border duration-1000 whitespace-nowrap"
-                                    to={`/posts-change/${post._id}`}
-                                >
-                                    Изменить
-                                </Link>
-
-                                <button 
-                                    className="w-3/12 bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600 duration-1000 whitespace-nowrap"
-                                    onClick={() => handleDeletePost(post._id)}
-                                >
-                                    Удалить
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                
-                </div>
-
-            </div>
-
-
-
-
-
-
-
             
+            {/* Кнопки для навигации */}
+            <div className="flex justify-center gap-5">
+                {btnNavArrow.map((btn, index) => {
+                    return (
+                        <NavLink 
+                            to={btn.link} 
+                            key={index}
+                            className={({ isActive }) => 
+                            isActive 
+                            ? "bg-blue-600 px-5 py-3 rounded text-white" 
+                            : "bg-gray-700 px-5 py-3 rounded text-white hover:bg-gray-800 duration-1000"
+                        }
+                        >
+                        {btn.name}
+                        </NavLink>
+                    )
+                })}
+            </div>
+
+            {/* Контент */}
+            <div className="mt-12">
+                <Outlet  />
+            </div>
 
         </div>
     )

@@ -13,6 +13,15 @@ import AdminPanel from './pages/AdminPanel.tsx';
 import PostPage from './pages/PostPage.tsx';
 import ChangePost from './pages/ChangePost.tsx'
 
+// Для вложенного роутинга
+import AdminStats from './pages/admin/AdminStats.tsx';
+import AdminProfile from './pages/admin/AdminProfile.tsx';
+import AdminPosts from './pages/admin/AdminPosts.tsx';
+import AdminUsers from './pages/admin/AdminUsers.tsx';
+import AdminFeedback from './pages/admin/AdminFeedback.tsx';
+
+
+
 function AppContent() {
   const location = useLocation();
   
@@ -32,13 +41,25 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/adminpanel" element={<AdminPanel />} />
           <Route path="/create" element={<CreatePost />} />
           <Route path="/posts-change/:id" element={<ChangePost />} />          
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path='/posts/:id' element ={<PostPage />} />
+
+
+          {/* Вложенный роут */}
+          <Route path="/adminpanel" element={<AdminPanel />} >
+            <Route index element={<AdminStats />} />
+
+            <Route path="stats" element={<AdminStats />} />
+            <Route path="profile" element={<AdminProfile />} />
+            <Route path="posts" element={<AdminPosts />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="feedback" element={<AdminFeedback />} />
+          </Route>
+
         </Routes>
       </main>
     </div>

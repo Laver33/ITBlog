@@ -6,15 +6,18 @@ import { useAuth } from '../context/AuthContext';
 import HomeAdmin from '../components/HomeAdmin';
 import usePostStore from '../store/postStore';
 import useUserStore from '../store/userStore';
+import useCotactMessageStore from '../store/contactMessageStore';
 
 
 const Home = () => {
-  const [error, setError] = useState<string | null>(null);
+
   const { user } = useAuth();
+  // const {error, setError} = useState<boolean | null>(false);
   
   // Сторы
   const { posts, loading, fetchPosts } = usePostStore();
   const { fetchUsers } = useUserStore();
+  const { fetchContactsMessages } = useCotactMessageStore();
 
   // Сортировка по дате
   const [isDescending, setIsDescending] = useState(true); 
@@ -39,13 +42,14 @@ const Home = () => {
 
   useEffect(() => {
 
+    fetchContactsMessages();
     fetchUsers();
     fetchPosts();
 
   }, []);
 
   if (loading) return <div>Загрузка...</div>;
-  if (error) return <div>Ошибка: {error}</div>;
+  // if (error) return <div>Ошибка: {error}</div>;
 
   return (
     <div className='flex mt-6 gap-3'>

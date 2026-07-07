@@ -1,22 +1,27 @@
 import { useState } from "react";
 
 interface iFormData {
+    name: string;
+    surname: string;
+    age: number;
     email: string;
     telegram: string;
-    phone: string;
     title: string;
     message: string;
 }
 
 
 const ContactForm = () => {
+    const [error, setError] = useState(false);
 
 
     // Сохранение
     const [formData, setFormData] = useState<iFormData>({
+        name: '',
+        surname: '',
+        age: 0,
         email: '',
         telegram: '',
-        phone: '',
         title: '',
         message: ''
     });
@@ -36,11 +41,20 @@ const ContactForm = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (formData.age > 99 || formData.age < 14) {
+            setError(true);
+            return;
+        }
+
+
+
         // Очистка формы
         setFormData({
+            name: '',
+            surname: '',
+            age: 0,
             email: '',
             telegram: '',
-            phone: '',
             title: '',
             message: ''
         });
@@ -56,6 +70,42 @@ const ContactForm = () => {
                 </h1>
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium mb-1 text-blue-400">Имя</label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Имя"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium mb-1 text-blue-400">Фамилия</label>
+                        <input
+                            type="text"
+                            name="surname"
+                            value={formData.surname}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Фамилия"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium mb-1 text-blue-400">Возраст</label>
+                        <input
+                            type="number"
+                            name="age"
+                            value={formData.age}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Возраст"
+                        />
+                    </div>
+
                     <div>
                         <label className="block text-sm font-medium mb-1 text-blue-400">Email</label>
                         <input
@@ -78,18 +128,6 @@ const ContactForm = () => {
                             onChange={handleChange}
                             className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="@username"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1 text-blue-400">Номер телефона</label>
-                        <input
-                            type="tel"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="+375(299)52-66-12"
                         />
                     </div>
 

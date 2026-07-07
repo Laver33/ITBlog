@@ -1,14 +1,9 @@
+import useUserStore from "../store/userStore";
 
 
+const HomeUsers = () => { 
 
-interface iUser {
-  _id: number;
-  name: string;
-  lastName: string;
-  email: string;
-}
-
-const HomeUsers = (props: {users: iUser[]}) => { 
+    const { users } = useUserStore();
 
     return(
         <div className=' bg-gray-900 rounded-sm shadow-lg border border-gray-700 px-2 pt-4 h-100 
@@ -18,7 +13,7 @@ const HomeUsers = (props: {users: iUser[]}) => {
           Пользователи
         </h2>
         <ul>
-          {props.users.map((user) => (
+          {users.map((user) => (
             <li 
               key={user._id} 
               className='bg-gray-800/50 hover:bg-gray-800 p-2 mb-2 rounded-sm border border-gray-700 transition-all duration-1000 hover:border-blue-500/50 hover:translate-x-1'

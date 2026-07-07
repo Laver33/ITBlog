@@ -1,35 +1,20 @@
 import { useEffect, useState, useMemo } from 'react';
 import * as IconName from "react-icons/cg";
-import api from '../services/api';
 import HomeUsers from '../components/HomeUsers';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import HomeAdmin from '../components/HomeAdmin';
-
-
-interface iPost {
-  _id: number;
-  title: string;
-  content: string;
-  date: string;
-}
-
-
-interface iUser {
-  _id: number;
-  name: string;
-  lastName: string;
-  email: string;
-}
+import usePostStore from '../store/postStore';
+import useUserStore from '../store/userStore';
 
 
 const Home = () => {
-  const [posts, setPosts] = useState<iPost[]>([]);
-  const [users, setUsers] = useState<iUser[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
   
+  // Сторы
+  const { posts, loading, fetchPosts } = usePostStore();
+  const { fetchUsers } = useUserStore();
 
   // Сортировка по дате
   const [isDescending, setIsDescending] = useState(true); 
@@ -51,39 +36,12 @@ const Home = () => {
   }, [posts, isDescending]); 
 
 
+
   useEffect(() => {
-    const fetchUsers = async () => {
-
-      try {
-
-        const response = await api.get('/users');
-        setUsers(response.data);
-
-      } catch (err: any) {
-        setError(err?.message || String(err) || 'Ошибка с юзерами');
-
-      } finally {
-        setLoading(false);
-
-      }
-    };
-
-    const fetchPosts = async () => {
-      try {
-
-        const response = await api.get('/posts');
-        setPosts(response.data);
-
-      } catch (err: any) {
-        setError(err?.message || String(err) || 'Ошибка с постами');
-        
-      } finally {
-        setLoading(false);
-      }
-    };
 
     fetchUsers();
     fetchPosts();
+
   }, []);
 
   if (loading) return <div>Загрузка...</div>;
@@ -154,7 +112,7 @@ const Home = () => {
 
       <div className='w-3/12'>
           <div className='sticky top-6 transition-all'>
-              <HomeUsers users={users} />
+              <HomeUsers />
               
               {user?.role === 'admin' ? <HomeAdmin /> : null}
           </div>

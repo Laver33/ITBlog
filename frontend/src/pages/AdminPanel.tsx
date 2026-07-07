@@ -1,78 +1,41 @@
-import { useEffect, useState } from "react";
-import api from "../services/api";
+import { useState } from "react";
 import CardForStat from "../components/CardForStat";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import usePostStore from "../store/postStore";
+import useUserStore from "../store/userStore";
 
-interface iUser {
-    _id: string,
-    name: string,
-    lastName: string,
-    email: string,
-    role: 'user' | 'admin',
-}
 
-interface iPost {
-    _id: string,
-    title: string,
-    content: string,
-    date: string,
-}
+
 
 const AdminPanel = () => {
 
     // Данные
-    const [users, setUsers] = useState<iUser[]>([]);
-    const [posts, setPosts] = useState<iPost[]>([]);
     const [error, setError] = useState(false);
 
+
+    // Сторы
+    const { posts, deletePost } = usePostStore();
+    const { users, deleteUser } = useUserStore();
     const { user } = useAuth();
      
-    useEffect(() => {
 
-        const fetchUsers = async () => {
-            try {
-                const response = await api.get('/users')
-                setUsers(response.data);
-            } catch (error) {
-                console.error('Ошибка при получении пользователей:', error);
-                setError(true);
-            }};
-
-            const fetchPosts = async () => {
-            try {
-                const response = await api.get('/posts')
-                setPosts(response.data);
-            } catch (error) {
-                console.error('Ошибка при получении постов:', error);
-                setError(true);
-            }};
-        
-
-        fetchUsers();
-        fetchPosts();
-    }, [])
-
-    const handleDelete = async (id: string) => {
-        try {
-
-            await api.delete(`/users/${id}`);
-            setUsers(prev => prev.filter(user => user._id !== id));
-
-        } catch (error) {
-            console.error('Ошибка при удалении пользователя:', error);
+    const handleDeleteUser = async (id: string) => {
+        if (!id) {
             setError(true);
+            return
         }
+
+        deleteUser(id); 
     }
 
     const handleDeletePost = async (id: string) => {
-        try {
-            await api.delete(`/posts/${id}`);
-            setPosts(prev => prev.filter(post => post._id !== id));
-        } catch (error) {
-            console.error('Ошибка при удалении поста:', error);
+        if (!id) {
             setError(true);
+            return
         }
+
+        deletePost(id); 
     }
 
     if (error){ return <p>"Ошибка при загрузке данных"</p> }
@@ -145,7 +108,7 @@ const AdminPanel = () => {
                                 {user.role === 'admin' ? <p className="w-32 shrink-0 truncate">{user.role}</p> : 
                                     <button 
                                         className="w-32 bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600 duration-1000 whitespace-nowrap"
-                                        onClick={() => handleDelete(user._id)}
+                                        onClick={() => handleDeleteUser(user._id)}
                                     >
                                         Удалить
                                     </button>
@@ -173,7 +136,7 @@ const AdminPanel = () => {
 
                                 <Link
                                     className="w-3/12 text-center bg-gray-500 px-3 py-1 rounded text-white hover:bg-gray-600 hover:border duration-1000 whitespace-nowrap"
-                                    to={`/posts/${post._id}`}
+                                    to={`/posts-change/${post._id}`}
                                 >
                                     Изменить
                                 </Link>

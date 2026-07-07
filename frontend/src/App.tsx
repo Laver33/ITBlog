@@ -22,7 +22,11 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-[#16171d]">
-      {showNavbar && <NavBar projectName="Мой блог" />}
+      {showNavbar && (
+        <div className="sticky top-0 z-50">
+          <NavBar projectName="Мой блог" />
+        </div>
+      )}
       
       <main className="container mx-auto px-4 py-8">
         <Routes>
@@ -30,7 +34,7 @@ function AppContent() {
           <Route path="/about" element={<About />} />
           <Route path="/adminpanel" element={<AdminPanel />} />
           <Route path="/create" element={<CreatePost />} />
-          <Route path="/posts/:id" element={<ChangePost />} />          
+          <Route path="/posts-change/:id" element={<ChangePost />} />          
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

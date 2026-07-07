@@ -9,6 +9,7 @@ const MyContacts = () => {
         secondary_email: 'pad333222@outlook.com',
         telegram: '@TrueReady'
     }
+    
     const contactsArray = Object.entries(myContacts); // для объекта в массив
 
     return(

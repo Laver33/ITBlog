@@ -39,6 +39,7 @@ const PostPage = () => {
 
 
     return (
+        
         <div className="flex gap-10 justify-center ">
 
 

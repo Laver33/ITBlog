@@ -7,11 +7,13 @@ import cors from 'cors';
 // Валидация
 import { registerValidator, loginValidator } from "./validations/authValidate.js";
 import { postCreateValidator } from "./validations/postValidate.js";
+import { contactSendValidator } from "./validations/contactValidate.js";
 
 // Контроллеры
 import * as authController from "./controllers/authController.js";
 import * as postController from "./controllers/postController.js";
 import * as userController from "./controllers/userController.js";
+import * as contactController from "./controllers/contactController.js";
 
 // MiddleWare
 import { AuthCheck } from "./middleware/authMiddleware.js";
@@ -52,6 +54,15 @@ app.get('/auth/me', AuthCheck, authController.getMe);
 app.get('/users', userController.getAllUsers )
 // app.put('/users/:id', userController.updateUser ) потом при личном кабинете
 app.delete('/users/:id', userController.deleteUserById )    
+
+
+// Контактная форма
+app.post('/contact', contactSendValidator, contactController.sendContactMessage);
+app.get('/contact', contactController.getAllContactsMessage );
+app.get('/contact/:id', contactController.getContactMessageById )
+app.delete('/contacts/:id', contactController.deleteContactMessage );
+app.delete('/contacts', contactController.deleteALLContactMessage );
+
 
 // CRUD Посты ( все готовы )
 app.post('/posts', AdminCheck, postCreateValidator, postController.createPost)

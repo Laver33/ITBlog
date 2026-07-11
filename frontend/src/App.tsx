@@ -12,6 +12,7 @@ import Register from './pages/auth/Register.tsx';
 import AdminPanel from './pages/AdminPanel.tsx';
 import PostPage from './pages/PostPage.tsx';
 import ChangePost from './pages/ChangePost.tsx'
+import FeedbackPage from './pages/FeedbackPage.tsx';
 
 // Для вложенного роутинга
 import AdminStats from './pages/admin/AdminStats.tsx';
@@ -46,7 +47,8 @@ function AppContent() {
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path='/posts/:id' element ={<PostPage />} />
+          <Route path='/posts/:id' element={<PostPage />} />
+          <Route path='/contacts/:id' element={<FeedbackPage />} />
 
 
           {/* Вложенный роут */}

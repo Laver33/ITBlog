@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useCotactMessageStore from "../store/contactMessageStore";
 
 interface iFormData {
     name: string;
@@ -13,6 +14,7 @@ interface iFormData {
 
 const ContactForm = () => {
     const [error, setError] = useState(false);
+    const { sendContactMessage } = useCotactMessageStore();
 
 
     // Сохранение
@@ -28,23 +30,26 @@ const ContactForm = () => {
 
 
     // Обнова полей
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange =  (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,  
-            [name]: value 
+            [name]: name === 'age' ? Number(value) : value 
         });
     };
 
 
     // Отправка
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
 
         if (formData.age > 99 || formData.age < 14) {
             setError(true);
             return;
         }
+
+        sendContactMessage(formData)
 
 
 
@@ -60,6 +65,8 @@ const ContactForm = () => {
         });
     };
 
+
+    if (error) return <p>Случилась проблема</p>
 
     return(
         <div className="w-full max-w-125">

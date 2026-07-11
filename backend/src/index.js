@@ -59,7 +59,7 @@ app.delete('/users/:id', userController.deleteUserById )
 // Контактная форма
 app.post('/contact', contactSendValidator, contactController.sendContactMessage);
 app.get('/contacts', contactController.getAllContactsMessage );
-app.get('/contact/:id', contactController.getContactMessageById )
+app.get('/contacts/:id', contactController.getContactMessageById )
 app.delete('/contacts/:id', contactController.deleteContactMessage );
 app.delete('/contacts', contactController.deleteALLContactMessage );
 

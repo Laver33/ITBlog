@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import useCotactMessageStore from "../../store/contactMessageStore";
 
 const AdminFeedback = () => {
-    const { contactMessage } = useCotactMessageStore()
+    const { contactMessage, deleteContactMessage } = useCotactMessageStore()
 
     return(
         <div className="w-full">
@@ -47,7 +47,7 @@ const AdminFeedback = () => {
                         {/* Кнопка */}
                         <div className="mt-4 pt-3 gap-3 flex border-gray-600">
                             <Link
-                                to={`/feedback/${message._id}`}
+                                to={`/contacts/${message._id}`}
                                 className="w-6/12 block text-center bg-blue-600 text-white px-4 py-2 rounded 
                                     hover:bg-blue-700 duration-300 font-medium text-sm
                                     transition-all"
@@ -59,6 +59,9 @@ const AdminFeedback = () => {
                                 className="w-6/12 block text-center bg-red-600 text-white px-4 py-2 rounded 
                                     hover:bg-red-700 duration-300 font-medium text-sm
                                     transition-all"
+                                    onClick={() => {
+                                        deleteContactMessage(message._id)
+                                    }}
                             >
                                 Удалить
                             </button>

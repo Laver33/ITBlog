@@ -12,11 +12,24 @@ interface iMessage {
     message: string;
 }
 
+interface iMessageInput {
+    name: string;
+    surname: string;
+    age: number;
+    email: string;
+    telegram: string;
+    title: string;
+    message: string;
+}
+
 interface iContactMessageStore {
   contactMessage: iMessage[];
+  currentMessage: iMessage | null;
   loading: boolean;
+
   fetchContactsMessages: () => Promise<void>;
-  ContactMessageById: (_id: string) => Promise<iMessage>;
+  sendContactMessage: (data: iMessageInput) => Promise<void>;
+  ContactMessageById: (_id: string | undefined) => Promise<iMessage>;
   deleteContactMessage: (_id: string) => Promise<void>;
   deleteAllContactMessage: () => Promise<void>;
 }
@@ -25,6 +38,7 @@ interface iContactMessageStore {
 
 const useCotactMessageStore = create<iContactMessageStore>((set) => ({
     contactMessage: [],
+    currentMessage: null,
     loading: false,
 
     fetchContactsMessages: async () => {
@@ -45,14 +59,14 @@ const useCotactMessageStore = create<iContactMessageStore>((set) => ({
 
     },
 
-    ContactMessageById: async (id: string) => {
+    ContactMessageById: async (id: string | undefined) => {
 
         set({ loading: true });
 
         try {
 
             const response = await api.get(`/contacts/${id}`);
-            set({ loading: false });
+            set({ currentMessage: response.data, loading: false }); 
             return response.data;
 
         } catch (error) {
@@ -97,7 +111,24 @@ const useCotactMessageStore = create<iContactMessageStore>((set) => ({
             set({ loading: false });
 
         }
-    }
+    },
+
+    sendContactMessage: async (data: iMessageInput) => {
+        set({ loading: true });
+
+        try {
+            const response = await api.post('/contacts', data);
+            set((state) => ({
+                contactMessage: [...state.contactMessage, response.data],
+                loading: false
+            }));
+        } catch (error) {
+            
+            console.error('Ошибка отправки:', error);
+            set({ loading: false });
+
+        }
+    },
 }))
 
 

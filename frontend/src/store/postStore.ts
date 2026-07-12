@@ -11,8 +11,10 @@ interface iPost {
 
 interface iPostStore {
   posts: iPost[];
+  currentPost: iPost | null;
   loading: boolean;
   fetchPosts: () => Promise<void>;
+  fetchPost: (_id: string | undefined) => Promise<void>;
   getByIdPost: (_id: string) => Promise<iPost>;
   updatePost: (post: iPost, _id: string) => Promise<void>;
   deletePost: (_id: string) => Promise<void>;
@@ -20,6 +22,7 @@ interface iPostStore {
 
 const usePostStore = create<iPostStore>((set) => ({
     posts: [],
+    currentPost: null,
     loading: false,
 
 
@@ -39,6 +42,19 @@ const usePostStore = create<iPostStore>((set) => ({
         }
     },
 
+    fetchPost: async (_id) => {
+        
+        set({ loading: true });
+
+        try {
+            const response = await api.get(`/posts/${_id}`);
+            set({ currentPost: response.data, loading: false })
+        } catch (error) {
+            console.log(error);
+            set({ loading: false });
+        }
+    },
+
 
     updatePost: async (post: iPost, _id: string) => {
 
@@ -46,6 +62,7 @@ const usePostStore = create<iPostStore>((set) => ({
 
         try {
 
+            
             const response = await api.put(`/posts/${_id}`, post);
 
             set((state) => ({

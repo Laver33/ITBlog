@@ -11,10 +11,9 @@ import { useFetchAllData } from '../hooks/useFetchAllData';
 const Home = () => {
 
   const { user } = useAuth();
-  // const {error, setError} = useState<boolean | null>(false);
   
   // Сторы
-  const { posts, loading } = usePostStore();;
+  const { posts, loading } = usePostStore();
 
   // Сортировка по дате
   const [isDescending, setIsDescending] = useState(true); 
@@ -22,11 +21,15 @@ const Home = () => {
     setIsDescending(!isDescending);
   };
 
-
   const sortedPosts = useMemo(() => {
+    if (!posts || !Array.isArray(posts)) return [];
+    
     const postsCopy = [...posts];
     
-    return postsCopy.sort((a, b) => {
+    // Фильтруем без даты
+    const validPosts = postsCopy.filter(post => post && post.date);
+    
+    return validPosts.sort((a, b) => {
       if (isDescending) {
         return b.date.localeCompare(a.date);
       } else {
@@ -35,16 +38,12 @@ const Home = () => {
     });
   }, [posts, isDescending]); 
 
-
-
   useFetchAllData()
 
   if (loading) return <div>Загрузка...</div>;
-  // if (error) return <div>Ошибка: {error}</div>;
 
   return (
     <div className='flex mt-6 gap-3'>
-
 
       {/* Левая колонка */}
       <div className='w-9/12'>
@@ -57,7 +56,6 @@ const Home = () => {
           </p>
 
           <hr className='border-white my-4'/>
-
 
           {/* Кнопка сортировки */}
           <button 
@@ -73,36 +71,41 @@ const Home = () => {
           </button>
         </div>
 
-
         {/* Посты */}
-        {sortedPosts.map((post) => (
-          <div 
-            key={post._id}
-            className='bg-gray-900 mx-6 p-6 mb-4 rounded-sm shadow-lg border border-gray-700 cursor-default'
-          >
-            <h1 className='text-2xl font-bold mb-4 text-blue-400'>
-              {post.title}
-            </h1>
-            <p className='text-gray-300 leading-relaxed'>
-              {post.content.slice(0, 200)}
-            </p>
-
-            {/* Нижняя часть поста */}
-            <div className="botton-content flex mt-6 justify-between">
-              <Link
-                to={`/posts/${post._id}`}
-                className='cursor-pointer px-5 py-2.5 text-sm font-medium text-white bg-gray-800 rounded-sm border border-gray-600 
-                  hover:bg-blue-600 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300'
-              >
-                Читать дальше
-              </Link>
-
-              <p className='text-gray-300'>
-                {post.date.slice(0, 10)} 
-              </p>
-            </div>
+        {sortedPosts.length === 0 ? (
+          <div className='bg-gray-900 mx-6 p-6 rounded-sm shadow-lg border border-gray-700'>
+            <p className='text-gray-400'>Нет постов</p>
           </div>
-        ))}
+        ) : (
+          sortedPosts.map((post) => (
+            <div 
+              key={post._id}
+              className='bg-gray-900 mx-6 p-6 mb-4 rounded-sm shadow-lg border border-gray-700 cursor-default'
+            >
+              <h1 className='text-2xl font-bold mb-4 text-blue-400'>
+                {post.title || 'Без названия'}
+              </h1>
+              <p className='text-gray-300 leading-relaxed'>
+                {post.content ? post.content.slice(0, 200) : ''}
+              </p>
+
+              {/* Нижняя часть поста */}
+              <div className="botton-content flex mt-6 justify-between">
+                <Link
+                  to={`/posts/${post._id}`}
+                  className='cursor-pointer px-5 py-2.5 text-sm font-medium text-white bg-gray-800 rounded-sm border border-gray-600 
+                    hover:bg-blue-600 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300'
+                >
+                  Читать дальше
+                </Link>
+
+                <p className='text-gray-300'>
+                  {post.date ? post.date.slice(0, 10) : 'Без даты'} 
+                </p>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       <div className='w-3/12'>
@@ -116,6 +119,5 @@ const Home = () => {
     </div>
   );
 };
-
 
 export default Home;

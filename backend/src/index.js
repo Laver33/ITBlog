@@ -57,20 +57,20 @@ app.delete('/users/:id', userController.deleteUserById )
 
 
 // Контактная форма
-app.post('/contact', contactSendValidator, contactController.sendContactMessage);
-app.get('/contacts', contactController.getAllContactsMessage );
-app.get('/contacts/:id', contactController.getContactMessageById )
-app.delete('/contacts/:id', contactController.deleteContactMessage );
-app.delete('/contacts', contactController.deleteALLContactMessage );
+app.post('/contact', AuthCheck, contactSendValidator, contactController.sendContactMessage);
+app.get('/contacts', AdminCheck, contactController.getAllContactsMessage );
+app.get('/contacts/:id', AdminCheck, contactController.getContactMessageById )
+app.delete('/contacts/:id', AdminCheck, contactController.deleteContactMessage );
+app.delete('/contacts', AdminCheck, contactController.deleteALLContactMessage );
 
 
 // CRUD Посты ( все готовы )
 app.post('/posts', AdminCheck, postCreateValidator, postController.createPost)
-app.get('/posts', postController.getAllPosts)
-app.get('/post/search', postController.searchPost)
-app.get('/posts/:id', postController.getPostById)  
-app.put('/posts/:id', postController.updatePost)
-app.delete('/posts/:id', postController.deletePostById)
+app.get('/posts', AuthCheck, postController.getAllPosts)
+app.get('/post/search', AuthCheck, postController.searchPost)
+app.get('/posts/:id', AuthCheck, postController.getPostById)  
+app.put('/posts/:id', AuthCheck, postController.updatePost)
+app.delete('/posts/:id', AdminCheck, postController.deletePostById)
 
 // добавить после тестов проверки AdminCheck и AuthCheck
 

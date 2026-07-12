@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
+import { useFetchAllData } from "../hooks/useFetchAllData";
 
 
 interface iButtonsNavArrow {
@@ -8,7 +9,7 @@ interface iButtonsNavArrow {
 
 const AdminPanel = () => {
 
-    
+    useFetchAllData()
 
     const btnNavArrow: iButtonsNavArrow[] = [
         {name: 'Статистика', link: 'stats'},

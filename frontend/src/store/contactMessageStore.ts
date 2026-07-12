@@ -22,6 +22,8 @@ interface iMessageInput {
     message: string;
 }
 
+
+
 interface iContactMessageStore {
   contactMessage: iMessage[];
   currentMessage: iMessage | null;
@@ -117,11 +119,12 @@ const useCotactMessageStore = create<iContactMessageStore>((set) => ({
         set({ loading: true });
 
         try {
-            const response = await api.post('/contacts', data);
+            const response = await api.post('/contact', data);
             set((state) => ({
                 contactMessage: [...state.contactMessage, response.data],
                 loading: false
             }));
+
         } catch (error) {
             
             console.error('Ошибка отправки:', error);

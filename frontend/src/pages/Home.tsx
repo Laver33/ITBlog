@@ -1,12 +1,11 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import * as IconName from "react-icons/cg";
 import HomeUsers from '../components/HomeUsers';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import HomeAdmin from '../components/HomeAdmin';
 import usePostStore from '../store/postStore';
-import useUserStore from '../store/userStore';
-import useCotactMessageStore from '../store/contactMessageStore';
+import { useFetchAllData } from '../hooks/useFetchAllData';
 
 
 const Home = () => {
@@ -15,9 +14,7 @@ const Home = () => {
   // const {error, setError} = useState<boolean | null>(false);
   
   // Сторы
-  const { posts, loading, fetchPosts } = usePostStore();
-  const { fetchUsers } = useUserStore();
-  const { fetchContactsMessages } = useCotactMessageStore();
+  const { posts, loading } = usePostStore();;
 
   // Сортировка по дате
   const [isDescending, setIsDescending] = useState(true); 
@@ -40,13 +37,7 @@ const Home = () => {
 
 
 
-  useEffect(() => {
-
-    fetchContactsMessages();
-    fetchUsers();
-    fetchPosts();
-
-  }, []);
+  useFetchAllData()
 
   if (loading) return <div>Загрузка...</div>;
   // if (error) return <div>Ошибка: {error}</div>;

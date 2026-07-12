@@ -49,20 +49,24 @@ const ContactForm = () => {
             return;
         }
 
-        sendContactMessage(formData)
+        try {
 
+            await sendContactMessage(formData)
 
-
-        // Очистка формы
-        setFormData({
-            name: '',
-            surname: '',
-            age: 0,
-            email: '',
-            telegram: '',
-            title: '',
-            message: ''
-        });
+            // Очистка формы
+            setFormData({
+                name: '',
+                surname: '',
+                age: 0,
+                email: '',
+                telegram: '',
+                title: '',
+                message: ''
+            });
+        } catch (error) {
+            setError(true)
+            console.log('Ошибка отправки: ', error)
+        }
     };
 
 

@@ -2,39 +2,24 @@
 
 Fullstack блог-платформа с JWT-аутентификацией, ролевой моделью (user/admin) и REST API.
 
-Проект будет завершен 07.07.2026
-
 ## 🛠️ Стек технологий
 
+**Backend**: Node.js + Express.js, MongoDB + Mongoose, JWT + bcrypt, express-validator
+
+**Frontend**: React + TypeScript + Vite, TailwindCSS, Zustand, Axios, React Router
+
+## ✨ Основные возможности
+
+- Регистрация / авторизация (JWT)
+- Роли: user (чтение) и admin (полный CRUD постов)
+- Создание, чтение, обновление, удаление постов
+- Поиск по заголовку (case-insensitive)
+- Адаптивный дизайн
+
+## 🚀 Запуск проекта
+
 ### Backend
-- **Node.js** + **Express.js** — сервер
-- **MongoDB** + **Mongoose** — база данных
-- **JWT** + **bcrypt** — аутентификация
-- **express-validator** — валидация данных
-
-### Frontend
-- **React** + **TypeScript** — интерфейс
-- **TailwindCSS** — стилизация
-- **Axios** — HTTP-клиент
-
-## ✨ Возможности
-
-### Пользователи
-- Регистрация и авторизация (JWT)
-- Роли: `user` и `admin`
-
-### Посты (CRUD)
-- Создание поста (только админ)
-- Чтение всех постов (публично)
-- Чтение одного поста (публично)
-- Редактирование поста (админ)
-- Удаление поста (админ)
-- Поиск по заголовку (регистронезависимый)
-
-
-## 🚀 Быстрый старт
-
-### 1. Клонирование репозитория
 ```bash
-git clone <url-репозитория>
-cd blog-project
+cd backend
+npm install
+npm run dev

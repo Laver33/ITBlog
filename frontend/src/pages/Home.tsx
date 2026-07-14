@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import HomeAdmin from '../components/HomeAdmin';
 import usePostStore from '../store/postStore';
 import { useFetchAllData } from '../hooks/useFetchAllData';
-
+import { motion } from "motion/react"
 
 const Home = () => {
 
@@ -71,6 +71,7 @@ const Home = () => {
           </button>
         </div>
 
+
         {/* Посты */}
         {sortedPosts.length === 0 ? (
           <div className='bg-gray-900 mx-6 p-6 rounded-sm shadow-lg border border-gray-700'>
@@ -78,7 +79,8 @@ const Home = () => {
           </div>
         ) : (
           sortedPosts.map((post) => (
-            <div 
+            <motion.div 
+              whileHover={{ scaleX: 1.02, scaleY: 0.98 }}
               key={post._id}
               className='bg-gray-900 mx-6 p-6 mb-4 rounded-sm shadow-lg border border-gray-700 cursor-default'
             >
@@ -103,7 +105,7 @@ const Home = () => {
                   {post.date ? post.date.slice(0, 10) : 'Без даты'} 
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))
         )}
       </div>

@@ -1,4 +1,5 @@
 import useUserStore from "../store/userStore";
+import { motion } from "motion/react"
 
 
 const HomeUsers = () => { 
@@ -14,16 +15,17 @@ const HomeUsers = () => {
         </h2>
         <ul>
           {users.map((user) => (
-            <li 
+            <motion.li
+              whileHover={{ scale: 1.02 }} 
               key={user._id} 
-              className='bg-gray-800/50 hover:bg-gray-800 p-2 mb-2 rounded-sm border border-gray-700 transition-all duration-1000 hover:border-blue-500/50 hover:translate-x-1'
+              className='bg-gray-800/50 hover:bg-gray-800 p-2 mb-2 rounded-sm border border-gray-700 transition-all duration-1000 hover:border-blue-500/50'
             >
               <p className='text-sm text-gray-300'>
                 <span className='font-semibold text-blue-400'>
                   {user.name} {user.lastName}
                 </span> • {user.email}
               </p>
-            </li>
+            </motion.li>
           ))}
         </ul>
       </div>
